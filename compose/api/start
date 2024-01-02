@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e errexit
+set -e pipefail
+set -e nounset
+
+# python3 demo_scripts/demo_seed_persons.py
+flask db upgrade
+python3 app.py
+
+
+

@@ -1,0 +1,46 @@
+services:
+  udado-api:
+    build:
+      context: .
+      dockerfile: ./compose/api/Dockerfile
+    command: /start
+    volumes:
+      - .:/opt/udado
+    env_file:
+      - ./.env
+    ports:
+      - "443:5125"
+      - "80:5125"
+    networks:
+      - udado-network
+    depends_on:
+      - udado-db
+
+  udado-db:
+    image: postgres:14.9
+    volumes:
+      - udado_postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+    ports:
+      - "5432:5432"
+    networks:
+      - udado-network
+      
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL:
+        admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: insecurepassword
+    ports:
+      - "5050:80"
+    networks:
+      - udado-network
+
+networks:
+  udado-network:
+    driver: bridge
+
+volumes:
+  udado_postgres_data:
