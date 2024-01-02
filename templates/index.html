@@ -1,85 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f4f4f4;
-            color: #333;
-            line-height: 1.6;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-top: 50px;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            background: #fff;
-            padding: 10px;
-            margin-bottom: 5px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .section-title {
-            color: #333;
-            margin: 20px 0;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-    </style>
-</head>
+{% extends "base.html" %}
+{% block title %}UdaDo{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h1>Uda-Do</h1>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Users</h2>
+            <ul class="list-group">
+                {% for user in users %}
+                <li class="list-group-item">{{ user.email }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h2>Tasks</h2>
+            <ul class="list-group">
+                {% for task in tasks %}
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>{{ task }} - Completed: {{ task.completed }}</span>
+                    <div>
+                        <form action="/complete-task" method="post" class="d-inline-block ml-2">
+                            <input type="hidden" name="taskid" value="{{ task.id }}">
+                            <input type="submit" class="btn btn-success btn-sm" value="Done">
 
-<body>
-    <div class="container">
-        <h1>ToDo app</h1>
-        <h2 class="section-title">Users</h2>
-        <ul>
-            {% for user in users %}
-            <li>{{ user.email }}</li>
-            {% endfor %}
-        </ul>
-        <h2 class="section-title">Tasks</h2>
-        <ul>
-            {% for task in tasks %}
-        
-            <li>{{ task }} - Completed: {{ task.completed }}</li>
-            <form action="/complete-task" method="post">
-                <input type="hidden" name="taskid" value="{{ task.id }}">
-                <input type="submit" value="Done">
+                        </form>
+                        <form action="/undo-complete" method="post" class="d-inline-block ml-2">
+                            <input type="hidden" name="taskid" value="{{ task.id }}">
+                            <input type="submit" class="btn btn-warning btn-sm" value="Undo">
+                        </form>
+                    </div>
+                </li>
+                
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h2>Add User</h2>
+            <form action="/add-user" method="post" class="form-inline">
+                <input type="text" class="form-control mr-2" name="name" placeholder="Name">
+                <input type="submit" class="btn btn-primary" value="Add User">
             </form>
-            <form action="/undo-complete" method="post">
-                <input type="hidden" name="taskid" value="{{ task.id }}">
-                <input type="submit" value="Undo">
+        </div>
+        <div class="col-md-6">
+            <h2>Add Task</h2>
+            <form action="/add-task" method="post" class="form-inline">
+                <input type="text" class="form-control mr-2" name="description" placeholder="Task">
+                <input type="submit" class="btn btn-primary" value="Add Task">
             </form>
-            {% endfor %}
-        </ul>
+        </div>
     </div>
-    <div class="container">
-        <h2 class="section-title">Add Task</h2>
-        <form action="/add-task" method="post">
-            <input type="text" name="description" placeholder="task">
-            <input type="submit" value="Add Task">
-        </form>
-    </div>
-    <div class="container">
-        <h2 class="section-title">Add User</h2>
-        <form action="/add-user" method="post">
-            <input type="text" name="name" placeholder="name">
-            <input type="submit" value="user">
-        </form>
-    </div>
-</body>
-</html>
+</div>
+   
+{% endblock %}
