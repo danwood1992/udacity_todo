@@ -10,6 +10,10 @@
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return await response.json();
+
+            const jsonResponse = await response.json();
+
+            return jsonResponse;
         } catch (error) {
             console.error('Failed to create list:', error);
             
@@ -24,6 +28,16 @@
             </li>`;
     }
     
+    function addTaskFormToMainContent(listName, listId) {
+        const list = document.getElementById(listName);
+        list.innerHTML += `
+        <form action="/add-task" method="post" class="form-inline">
+            <input type="hidden" name="listid" value="${ listId }">
+            <input type="text" class="form-control mr-2" name="description" placeholder="New Task" aria-label="Task Description">
+            <button type="submit" class="btn btn-primary">+</button>
+        </form>`;
+    }
+
     function addListToMainContent(list) {
         const listsMain = document.getElementById('lists-main');
         listsMain.innerHTML += `
@@ -33,15 +47,18 @@
                     <!-- Add other list details here -->
                 </div>
             </div>`;
+        addTaskFormToMainContent(list.name, list.id);
     }
+
     
     document.getElementById("add-list-form").onsubmit = async function(e) {
         e.preventDefault();
         const listName = e.target.name.value;
         const newList = await createList(listName);
+        const listId = newList.id;
         if (newList) {
             addListToSidebar(newList.name);
-            addListToMainContent(newList);
+            addListToMainContent(newList, listId);
         }
     };
     
