@@ -58,14 +58,3 @@ class TodoItem(db.Model):
         self.description = description
         db.session.commit()
 
-
-    
-# class TodoList(db.Model):
-#     __tablename__ = 'todo_lists'
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(), nullable=False)
-#     items = db.relationship('TodoItem', backref='list', lazy=True)
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    
-#     def __repr__(self):
-#         return f'Todo List: {self.name}'
