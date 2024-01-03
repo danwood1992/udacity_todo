@@ -5,15 +5,14 @@
     <head>
         <meta charset="UTF-8">
         <title>Home</title>
-        <!-- Bootstrap CSS -->
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     </head>
-    
-
     <body>
-
+        {% include 'errors/standard_error.html'%}
         {% block content %}
         {% endblock %}
+        {% block scripts %}
+        {% endblock scripts %}
     </body>
     </html>
     

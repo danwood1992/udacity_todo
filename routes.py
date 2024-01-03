@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, jsonify
 from models import User, TodoItem, TodoList
 from base import app, db
 
@@ -14,13 +14,17 @@ def index():
     tasks = TodoItem.query.all()
     return render_template('index.html', users=users,lists=lists, tasks=tasks)
 
-@app.route('/add-list', methods=['POST'])
+@app.route('/lists/create', methods=['POST'])
 def add_list():
-    name = request.form.get('name')
+    name = request.get_json()['name']
     list = TodoList(name=name)
     db.session.add(list)
     db.session.commit()
-    return redirect(url_for('index'))
+    return jsonify({
+        'id': list.id,
+        'name': list.name
+    })
+    
 
 @app.route('/add-task', methods=['POST'])
 def add_task():
