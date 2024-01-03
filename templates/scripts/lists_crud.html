@@ -1,29 +1,48 @@
 <script>
-    document.getElementById("add-list-form").onsubmit = function(e) {
-        e.preventDefault();
-        fetch('/lists/create', {
-            method: 'POST',
-            body: JSON.stringify({
-                'name': document.getElementById('add-list-form').name.value
-            }),
-            headers: {
-                'Content-Type': 'application/json'
+    async function createList(name) {
+        try {
+            const response = await fetch('/lists/create', {
+                method: 'POST',
+                body: JSON.stringify({ 'name': name }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        })
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(jsonResponse) {
-            console.log(jsonResponse);
-            const aItem = document.createElement('a');
-            aItem.className = 'nav-link';
-            aItem.innerText = jsonResponse.name;
-            document.getElementById('sidebar-lists').appendChild(aItem);
-
-        })
-        .catch(function(error) {
-            console.log(error);
-            document.getElementById('standard-error').classList.remove('d-none');
-        });
-    }  
+            return await response.json();
+        } catch (error) {
+            console.error('Failed to create list:', error);
+            
+        }
+    }
+    
+    function addListToSidebar(listName) {
+        const sidebarLists = document.getElementById('sidebar-lists');
+        sidebarLists.innerHTML += `
+            <li class="nav-item">
+                <a class="nav-link">${listName}</a>
+            </li>`;
+    }
+    
+    function addListToMainContent(list) {
+        const listsMain = document.getElementById('lists-main');
+        listsMain.innerHTML += `
+            <div class="row mb-4" id="${list.name}">
+                <div class="col-md-12">
+                    <h3>${list.name}</h3>
+                    <!-- Add other list details here -->
+                </div>
+            </div>`;
+    }
+    
+    document.getElementById("add-list-form").onsubmit = async function(e) {
+        e.preventDefault();
+        const listName = e.target.name.value;
+        const newList = await createList(listName);
+        if (newList) {
+            addListToSidebar(newList.name);
+            addListToMainContent(newList);
+        }
+    };
+    
 </script>
