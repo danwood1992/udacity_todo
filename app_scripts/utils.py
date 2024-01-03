@@ -9,7 +9,6 @@ def db_connect():
        host=os.environ.get('POSTGRES_HOST'),
        port=os.environ.get('POSTGRES_PORT')
        )
-    
     cur = conn.cursor()
 
     return conn, cur
@@ -27,11 +26,8 @@ def create_table(table_name, columns):
         return
     
     cur.execute(f"CREATE TABLE IF NOT EXISTS {table_name} ({columns});")
-
     conn.commit()
-
     db_close(conn, cur)
-
     print(f"Table {table_name} created successfully")
 
     return
@@ -44,11 +40,8 @@ def drop_table(table_name):
         return
     
     cur.execute(f"DROP TABLE IF EXISTS {table_name};")
-
     conn.commit()
-
     db_close(conn, cur)
-
     print(f"Table {table_name} dropped successfully")
 
     return
@@ -61,13 +54,9 @@ def insert_row(table_name, columns, values):
         return
     
     cur.execute(f"INSERT INTO {table_name} ({columns}) VALUES ({values});")
-
     conn.commit()
-
     db_close(conn, cur)
-
     print(f"Row inserted successfully")
-
     return
 
 def fetch_all(table_name):
@@ -78,11 +67,8 @@ def fetch_all(table_name):
         return
     
     cur.execute(f"SELECT * FROM {table_name};")
-
     result = cur.fetchall()
-
     db_close(conn, cur)
-
     print(f"fetchall result: {result}")
 
     return result
@@ -95,11 +81,8 @@ def fetch_one(table_name, column, value):
         return
     
     cur.execute(f"SELECT * FROM {table_name} WHERE {column} = '{value}';")
-
     result = cur.fetchone()
-
     db_close(conn, cur)
-
     print(f"fetchone result: {result}")
 
     return
