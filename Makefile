@@ -24,4 +24,4 @@ logs:
 
 exec-api:
 	@echo "Executing API container..."
-	docker exec -it udado-udado-api-1 bash
+	docker exec -it udacity-todo-udado-api-1 bash

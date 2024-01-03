@@ -1,12 +1,59 @@
 from flask import render_template, request, redirect, url_for
-from models import User, TodoItem
+from models import User, TodoItem, TodoList
 from base import app, db
+
+def get_task(request):
+    task_id = request.form.get('taskid')
+    task = TodoItem.query.filter_by(id=task_id).first()
+    return task
 
 @app.route('/')
 def index():
     users = User.query.all()
+    lists = TodoList.query.all()
     tasks = TodoItem.query.all()
-    return render_template('index.html', users=users, tasks=tasks)
+    return render_template('index.html', users=users,lists=lists, tasks=tasks)
+
+@app.route('/add-list', methods=['POST'])
+def add_list():
+    name = request.form.get('name')
+    list = TodoList(name=name)
+    db.session.add(list)
+    db.session.commit()
+    return redirect(url_for('index'))
+
+@app.route('/add-task', methods=['POST'])
+def add_task():
+    list_id = request.form.get('listid')
+    description = request.form.get('description')
+    task = TodoItem(description=description, list_id=list_id)
+    db.session.add(task)
+    db.session.commit()
+    return redirect(url_for('index'))
+
+@app.route('/complete-task', methods=['POST'])
+def complete_task():
+    task = get_task(request)
+    task.completed = True
+    db.session.commit()
+    return redirect(url_for('index'))
+
+@app.route('/undo-complete', methods=['POST'])
+def undo_complete_task():
+    task = get_task(request)
+    task.undo_complete()
+    return redirect(url_for('index'))
+
+@app.route('/delete-task', methods=['POST'])
+def delete_task():
+    task = get_task(request)
+    task.delete()
+    return redirect(url_for('index'))
+
+@app.route('/users')
+def users():
+    users = User.query.all()
+    return render_template('users.html', users=users)
 
 @app.route('/add-user', methods=['POST'])
 def add_user():
@@ -14,65 +61,4 @@ def add_user():
     user = User(name=name, email=f"{name.lower()}@mail.com")
     db.session.add(user)
     db.session.commit()
-
-    return redirect(url_for('index'))
-
-@app.route('/add-task', methods=['POST'])
-def add_task():
-    description = request.form.get('description')
-    task = TodoItem(description=description)
-    db.session.add(task)
-    db.session.commit()
-
-    return redirect(url_for('index'))
-
-@app.route('/complete-task', methods=['POST'])
-def complete_task():
-    task_id = request.form.get('taskid')
-    task = TodoItem.query.filter_by(id=task_id).first()
-    print(f"debug: {task}")
-
-    task.completed = True
-    db.session.commit()
-
-    return redirect(url_for('index'))
-
-# @app.route('/undo-complete', methods=['POST'])
-# def undo_complete_task():
-#     task_id = request.form.get('taskid')
-#     task = TodoItem.query.filter_by(id=task_id).first()
-#     print(f"debug: {task}")
-
-#     task.completed = False
-#     db.session.commit()
-
-#     return redirect(url_for('index'))
-
-@app.route('/undo-complete', methods=['POST'])
-def undo_complete_task():
-    print(f"debug: {request.form}")
-    task_id = request.form.get('taskid')
-    task = TodoItem.query.filter_by(id=task_id).first()
-    print(f"debug: {task}")
-    print(f"debug: {task.completed}")
-    task.undo_complete()
-
-    return redirect(url_for('index'))
-
-# @app.route('/delete-task', methods=['POST'])
-# def delete_task():
-#     task_id = request.form.get('taskid')
-#     task = TodoItem.query.filter_by(id=task_id).first()
-
-#     db.session.delete(task)
-#     db.session.commit()
-
-#     return redirect(url_for('index'))
-
-@app.route('/delete-task', methods=['POST'])
-def delete_task():
-    task_id = request.form.get('taskid')
-    task = TodoItem.query.filter_by(id=task_id).first()
-    task.delete()
-
-    return redirect(url_for('index'))
+    return redirect(url_for('users'))

@@ -9,12 +9,31 @@ class User(db.Model):
     def __repr__(self):
         return f'User ID: {self.id}, name: {self.name}'
     
+class TodoList(db.Model):
+    __tablename__ = 'todo_lists'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(), nullable=False)
+    tasks = db.relationship('TodoItem', backref='list', lazy=True)
+  
+    def __repr__(self):
+        return f'Todo List: {self.name}'
+    
+    def add_task(self, description):
+        task = TodoItem(description=description, list_id=self.id)
+        db.session.add(task)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+    
 class TodoItem(db.Model):
     __tablename__ = 'todo_items'
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(), nullable=False)
     completed = db.Column(db.Boolean, nullable=False, default=False)
     important = db.Column(db.Boolean, nullable=False, default=False)
+    list_id = db.Column(db.Integer, db.ForeignKey('todo_lists.id'), nullable=False)
 
     def __repr__(self):
         return f'Todo Item: {self.description}'
@@ -38,6 +57,7 @@ class TodoItem(db.Model):
     def update(self, description):
         self.description = description
         db.session.commit()
+
 
     
 # class TodoList(db.Model):
