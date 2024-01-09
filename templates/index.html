@@ -8,7 +8,7 @@
             <div class="sidebar-sticky">
                 <ul class="nav flex-column" id="sidebar-lists">               
                     {% for list in lists %}                 
-                    <div class="container-fluid ">
+                    <div class="container-fluid" id="sidebar-{{list.name}}">
                         <li class="nav-item m-2 row ">
                             <a class="m-2 justify-content-start col-sm">{{list.name}}</a>
                             {% include 'forms/form_list_update.html' %}    
@@ -25,7 +25,7 @@
             <div class="card p-4">
                 <div id="lists-main">
                 {% for list in lists %}
-                <div class="row m-4 border rounded-lg shadow p-4" id="{{ list.name }}">
+                <div class="row m-4 border rounded-lg shadow p-4" id="{{list.name}}">
                     <div class="col-md-12 text-capitalize">
                         <h4>{{ list.name }}</h4>
                         {% include 'forms/form_task_add.html' %}
@@ -49,10 +49,7 @@
 </div>
 {% endblock %}
 {% block scripts %}
-{% include 'scripts/js_list_add.html' %}
 {% include 'scripts/js_list_del.html' %}
-{% include 'scripts/js_list_edit.html' %}
-
-
+{% include 'scripts/js_list_add.html' %}
 {% endblock scripts %}
 

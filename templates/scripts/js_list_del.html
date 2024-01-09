@@ -20,24 +20,30 @@
         }
     }
 
-    function removeSidebarList(listname) {
-        sidebarlist = document.getElementById(listname)
-        console.log("removing list");
-        console.log(sidebarlist);
     
+    function removelistElem(listname) {
+        console.log("Removing sidebar lists");
+        console.log(listname);
+        const sidebarListDiv = document.getElementById("sidebar-" + listname);
+        const mainListDiv = document.getElementById(listname)
+        sidebarListDiv.remove();
+        mainListDiv.remove();
+        
     }
+
 
     document.getElementById("delete-list-form").onsubmit = async function(e) {
         e.preventDefault();
-        console.log("delete js script triggered")
-        console.log(e)
+        
+        console.log("delete js script triggered");
+        console.log(e);
         const listid = e.target.listid.value;
-        const listname = e.target.listid.value;
-        const success = await deleteList(listid)
+        const listname = e.target.listname.value;
+        const success = await deleteList(listid);
         if (success) {
             console.log("deleted" + listname);
-            removeSidebarList(listname);
-
+            removelistElem(listname)
+           
         }
         
     };
