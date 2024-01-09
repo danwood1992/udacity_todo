@@ -20,6 +20,7 @@ def add_list():
     list = TodoList(name=name)
     db.session.add(list)
     db.session.commit()
+    
     return jsonify({
         'id': list.id,
         'name': list.name
@@ -29,7 +30,6 @@ def add_list():
 def delete_list():
 
     listid = request.get_json()['listid']
-
     todo_list = TodoList.query.get(listid)
 
     if todo_list:
