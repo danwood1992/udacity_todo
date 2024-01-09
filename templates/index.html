@@ -14,11 +14,11 @@
                     </li>
                     {% for list in lists %}
                     <li class="nav-item">
-                        <a class="nav-link"
-                        >
-                            {{ list.name }}
-                        </a>
-                    </li>
+                      
+                       {% include 'forms/delete-list.html' %}
+    
+                </li>
+               
                     {% endfor %}
                 </ul>
                {% include 'forms/add-list.html' %}
@@ -35,6 +35,7 @@
                     <div class="col-md-12">
                         <h3>{{ list.name }}</h3>
                         {% include 'forms/add-task.html' %}
+
                         <ul class="list-group mt-3">
                             {% for task in list.tasks %}
                             <li class="list-group-item d-flex justify-content-between align-items-center">

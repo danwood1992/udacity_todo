@@ -24,8 +24,16 @@ class TodoList(db.Model):
         db.session.commit()
 
     def delete(self):
+        todo_items = TodoItem.query.all()
+        print(f"debug all todo items: {todo_items}")
+        for item in todo_items:
+            if item.list_id == self.id:
+                print("debug item: List id match")
+                item.delete()
         db.session.delete(self)
         db.session.commit()
+
+        
     
 class TodoItem(db.Model):
     __tablename__ = 'todo_items'

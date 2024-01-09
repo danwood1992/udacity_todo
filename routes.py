@@ -24,7 +24,23 @@ def add_list():
         'id': list.id,
         'name': list.name
     })
-    
+
+@app.route('/lists/delete', methods=['POST'])
+def delete_list():
+
+    listid = request.get_json()['listid']
+
+    todo_list = TodoList.query.get(listid)
+
+    if todo_list:
+        todo_list.delete()
+    else:
+        print("No TodoList with that Id exists")
+
+    return jsonify({
+        'id': todo_list.id,
+        'name': todo_list.name
+    })    
 
 @app.route('/add-task', methods=['POST'])
 def add_task():
