@@ -11,13 +11,13 @@
                     <div class="container-fluid ">
                         <li class="nav-item m-2 row ">
                             <a class="m-2 justify-content-start col-sm">{{list.name}}</a>
-                            {% include 'forms/update-list.html' %}    
-                            {% include 'forms/delete-list.html' %}
+                            {% include 'forms/form_list_update.html' %}    
+                            {% include 'forms/form_list_del.html' %}
                         </li>
                     </div>
                     {% endfor %}
                 </ul>
-               {% include 'forms/add-list.html' %}
+               {% include 'forms/form_list_add.html' %}
             </div>
         </div>
         <!-- Main Content Area -->
@@ -28,13 +28,13 @@
                 <div class="row m-4 border rounded-lg shadow p-4" id="{{ list.name }}">
                     <div class="col-md-12 text-capitalize">
                         <h4>{{ list.name }}</h4>
-                        {% include 'forms/add-task.html' %}
+                        {% include 'forms/form_task_add.html' %}
                         <ul class="list-group">
                             {% for task in list.tasks %}
                             <li class="list-group-item d-flex justify-content-between rounded align-items-center">
                                 <span class="font-weight-bold">{{ task.description }}</span>
                                 <div>
-                                    {% include 'forms/complete-task.html' %}    
+                                    {% include 'forms/form_task_complete.html' %}    
                                 </div>
                             </li>
                             {% endfor %}
@@ -49,6 +49,10 @@
 </div>
 {% endblock %}
 {% block scripts %}
-{% include 'scripts/lists_crud.html' %}
+{% include 'scripts/js_list_add.html' %}
+{% include 'scripts/js_list_del.html' %}
+{% include 'scripts/js_list_edit.html' %}
+
+
 {% endblock scripts %}
 
