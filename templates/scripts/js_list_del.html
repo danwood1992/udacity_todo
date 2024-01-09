@@ -1,4 +1,16 @@
 <script>
+     async function getlists() {
+        var response = await fetch('/getlists/')
+
+        console.log(response)
+        .then(response => response.json())
+        .then(data => { 
+            var lists = data.lists;
+        } )
+       
+        return lists; 
+    }
+
     async function deleteList(listid) {
         try {
             const response = await fetch('/lists/delete', {
@@ -10,11 +22,11 @@
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+
             return await response.json();
-
             const jsonResponse = await response.json();
-
             return jsonResponse;
+
         } catch (error) {
             console.error('Failed to Delete list:', error);            
         }
@@ -27,14 +39,13 @@
         const sidebarListDiv = document.getElementById("sidebar-" + listname);
         const mainListDiv = document.getElementById(listname)
         sidebarListDiv.remove();
-        mainListDiv.remove();
-        
+        mainListDiv.remove(); 
     }
 
-
-    document.getElementById("delete-list-form").onsubmit = async function(e) {
+{% for list in lists %}
+   
+    document.getElementById("delete-list-form-{{list.id}}").onsubmit = async function(e) {
         e.preventDefault();
-        
         console.log("delete js script triggered");
         console.log(e);
         const listid = e.target.listid.value;
@@ -43,11 +54,12 @@
         if (success) {
             console.log("deleted" + listname);
             removelistElem(listname)
-           
         }
         
     };
-    
+{% endfor %}
+ 
 </script>
+
 
 

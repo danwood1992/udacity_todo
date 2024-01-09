@@ -20,19 +20,31 @@
         }
     }
 
-    function addListToSidebar(listName) {
+    function addListToSidebar(listName, listId) {
         const sidebarLists = document.getElementById('sidebar-lists');
         sidebarLists.innerHTML += `
-            <li class="nav-item">
-                <a class="nav-link">${listName}</a>
-            </li>`;
+        <div class="container-fluid" id="sidebar-${listName}">
+            <li class="nav-item m-2 row">
+                <a class="m-2 justify-content-start col-sm">${listName}</a>
+                <form id="update-list-form">
+                    <input type="hidden" class="form-control" name="listid" value="${listId}"  aria-label="List Name">
+                    <button type="submit" class="btn btn-sm btn-success m-1">Edit</button>
+                </form>
+                <form id="delete-list-form" >
+                    <input type="hidden" class="form-control" name="listid" value="${listId}"  aria-label="List Name">
+                    <input type="hidden" class="form-control" name="listname" value=${listName}"  aria-label="List Name">
+                    <button type="submit" class="btn btn-sm m-1 btn-danger">-</button>
+                </form>
+            </li>
+        </div>
+            `;
     }
     
     function addTaskFormToMainContent(listName, listId) {
         const list = document.getElementById(listName);
         list.innerHTML += `
         <form action="/add-task" method="post" class="form-inline">
-            <input type="hidden" name="listid" value="${ listId }">
+            <input type="hidden" name="listid" value="${listId}">
             <input type="text" class="form-control mr-2" name="description" placeholder="New Task" aria-label="Task Description">
             <button type="submit" class="btn btn-primary">+</button>
         </form>`;
@@ -56,7 +68,7 @@
         const newList = await createList(listName);
         const listId = newList.id;
         if (newList) {
-            addListToSidebar(newList.name);
+            addListToSidebar(newList.name,listId);
             addListToMainContent(newList, listId);
         }
     };
