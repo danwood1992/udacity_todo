@@ -55,6 +55,9 @@ addListToMainContent: Adds the new list to the main content area.
         if (!sidebarLists) return;
         
         const listItem = document.createElement('li');
+        const divItem = document.createElement('div');
+        divItem.classList.add('container-fluid');
+
         listItem.classList.add('nav-item', 'm-2', 'row');
         listItem.id = "sidebar-" + listName;
         listItem.innerHTML = `
@@ -62,11 +65,12 @@ addListToMainContent: Adds the new list to the main content area.
             <form id="delete-list-form-${listId}" >
                 <input type="hidden" class="form-control" name="listid" value="${listId}"  aria-label="List Name">
                 <input type="hidden" class="form-control" name="listname" value="${listName}"  aria-label="List Name">
-                <button type="submit" class="btn btn-sm m-1 btn-danger">-</button>
+                <button type="submit" class="btn btn-x-sm mt-2 btn-danger">-</button>
             </form>
         `;
+        divItem.appendChild(listItem);
 
-        sidebarLists.appendChild(listItem);
+        sidebarLists.appendChild(divItem);
     }
 
     function addTaskFormToMainContent(listName, listId) {
