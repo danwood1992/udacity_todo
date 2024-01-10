@@ -67,9 +67,16 @@ def task_completion():
 
 @app.route('/delete-task', methods=['POST'])
 def delete_task():
-    task = get_task(request)
-    task.delete()
-    return redirect(url_for('index'))
+    task_id = request.get_json()['taskid']
+    print(f"debug task id: {task_id}")
+    if task_id:
+        task = TodoItem.query.get(task_id)
+        task.delete()
+       
+    return jsonify({
+        'id': task.id,
+        'description': task.description
+    })
 
 @app.route('/users')
 def users():

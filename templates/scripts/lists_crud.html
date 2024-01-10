@@ -61,7 +61,7 @@ addListToMainContent: Adds the new list to the main content area.
         listItem.classList.add('nav-item', 'm-2', 'row');
         listItem.id = "sidebar-" + listName;
         listItem.innerHTML = `
-            <a class="m-2 justify-content-start col-sm">${listName}</a>
+            <a class="m-1 justify-content-start col-sm">${listName}</a>
             <form id="delete-list-form-${listId}" >
                 <input type="hidden" class="form-control" name="listid" value="${listId}"  aria-label="List Name">
                 <input type="hidden" class="form-control" name="listname" value="${listName}"  aria-label="List Name">
@@ -144,6 +144,26 @@ addListToMainContent: Adds the new list to the main content area.
         }
     }
 
+    async function taskDeletion(taskid) {
+        console.log("taskDeletion function");
+        try {
+            const response = await fetch('/delete-task', {
+                method: 'POST',
+                body: JSON.stringify({ 'taskid': taskid }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        
+            return await response.json();
+
+    
+        } catch (error) {
+            console.error('Failed to delete task:', error);            
+        }
+    }
+
 
 
     document.body.addEventListener('submit', async function(e) {
@@ -158,6 +178,20 @@ addListToMainContent: Adds the new list to the main content area.
                 console.log("completed:  " + success.completed);
                 console.log("id:  " + success.id);
                 changCompleteButton(taskid, success.completed);
+            }
+        }
+    });
+
+    document.body.addEventListener('submit', async function(e) {
+        if (e.target && e.target.id.startsWith('task-deletion-form-')) {
+            e.preventDefault();
+            const taskid = e.target.taskid.value;
+            const success = await taskDeletion(taskid);
+            if (success) {
+                console.log("taskDeletion function returning:  " + JSON.stringify(success));
+                console.log("id:  " + success.id);
+                const taskDiv = document.getElementById('task-' + taskid);
+                taskDiv.remove();
             }
         }
     });
