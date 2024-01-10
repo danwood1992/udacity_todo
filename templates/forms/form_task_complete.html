@@ -1,4 +1,8 @@
-<form id="update-list-form">
-    <input type="hidden" class="form-control" name="listid" value="{{list.id}}"  aria-label="List Name">
-    <button type="submit" class="btn btn-sm btn-success m-1">Done</button>
+<form id="task-completion-form-{{task.id}}" class="mb-n1">
+    <input type="hidden" class="form-control" name="taskid" value="{{task.id}}"  aria-label="List Name">
+    {% if task.completed %}
+    <button id="task-completion-form-button-{{task.id}}" type="submit" class="btn btn-sm btn-secondary m-1 small-txt">Completed :)</button>
+    {% else %}
+    <button id="task-completion-form-button-{{task.id}}" type="submit" class="btn btn-sm btn-success m-1 small-txt">Complete</button>
+    {% endif %}
 </form>

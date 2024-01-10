@@ -50,14 +50,6 @@ class TodoItem(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def undo_complete(self):
-        self.completed = False
-        db.session.commit()
-
-    def complete(self):
-        self.completed = True
-        db.session.commit()
-
     def toggle_important(self):
         self.important = not self.important
         db.session.commit()

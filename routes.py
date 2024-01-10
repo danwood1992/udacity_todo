@@ -12,6 +12,7 @@ def index():
     users = User.query.all()
     lists = TodoList.query.all()
     tasks = TodoItem.query.all()
+    print(f"debug tasks: {tasks}")
     return render_template('index.html', users=users,lists=lists, tasks=tasks)
 
 @app.route('/lists/create', methods=['POST'])
@@ -53,13 +54,14 @@ def add_task():
 @app.route('/task-completion', methods=['POST'])
 def task_completion():
     task_id = request.get_json()['taskid']
+    print(f"debug task id: {task_id}")
     if task_id:
         task = TodoItem.query.get(task_id)
-        task.complete = not task.complete
+        task.completed = not task.completed
         db.session.commit()
     return jsonify({
         'id': task.id,
-        'complete': task.complete
+        'completed': task.completed
     })
 
 

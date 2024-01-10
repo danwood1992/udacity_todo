@@ -6,8 +6,16 @@
         <meta charset="UTF-8">
         <title>Home</title>
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            .mb-n1 {
+            margin-bottom: -0.3rem !important;
+            }
+            .small-txt {
+            font-size: 0.75rem;
+            }
+        </style>
     </head>
-    <body>
+    <body class="bg-light">
         {% include 'errors/standard_error.html'%}
         {% block content %}
         {% endblock %}

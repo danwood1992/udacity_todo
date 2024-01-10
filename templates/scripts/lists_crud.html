@@ -13,120 +13,178 @@ addListToMainContent: Adds the new list to the main content area.
 -->
 
 <script>
-async function deleteList(listid) {
-    try {
-        const response = await fetch('/lists/delete', {
-            method: 'POST',
-            body: JSON.stringify({ 'listid': listid }),
-            headers: { 'Content-Type': 'application/json' }
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return await response.json();
-   
-    } catch (error) {
-        console.error('Failed to Delete list:', error);            
-    }
-}
-
-function removelistElem(listname) {
-    console.log("Removing sidebar lists");
-    console.log(listname);
-    const sidebarListDiv = document.getElementById("sidebar-" + listname);
-    const mainListDiv = document.getElementById(listname)
-    sidebarListDiv.remove();
-    mainListDiv.remove(); 
-}
-
-async function createList(name) {
-    try {
-        const response = await fetch('/lists/create', {
-            method: 'POST',
-            body: JSON.stringify({ 'name': name }),
-            headers: { 'Content-Type': 'application/json' }
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return await response.json();
-       
-    } catch (error) {
-        console.error('Failed to create list:', error);
-        return null;
-        
-    }
-}
-
-function addListToSidebar(listName, listId) {
-    const sidebarLists = document.getElementById('sidebar-lists');
-    if (!sidebarLists) return;
     
-    const listItem = document.createElement('li');
-    listItem.classList.add('nav-item', 'm-2', 'row');
-    listItem.id = "sidebar-" + listName;
-    listItem.innerHTML = `
-        <a class="m-2 justify-content-start col-sm">${listName}</a>
-        <form id="update-list-form-${listId}">
-            <input type="hidden" class="form-control" name="listid" value="${listId}"  aria-label="List Name">
-            <button type="submit" class="btn btn-sm btn-success m-1">Edit</button>
-        </form>
-        <form id="delete-list-form-${listId}" >
-            <input type="hidden" class="form-control" name="listid" value="${listId}"  aria-label="List Name">
-            <input type="hidden" class="form-control" name="listname" value="${listName}"  aria-label="List Name">
-            <button type="submit" class="btn btn-sm m-1 btn-danger">-</button>
-        </form>
-    `;
-
-    sidebarLists.appendChild(listItem);
-}
-
-function addTaskFormToMainContent(listName, listId) {
-    const list = document.getElementById(listName);
-    list.innerHTML += `
-    <form action="/add-task" method="post" class=" ml-2 form-inline">
-        <input type="hidden" name="listid" value="${listId}">
-        <input type="text" class="form-control mr-2" name="description" placeholder="New Task" aria-label="Task Description">
-        <button type="submit" class="btn btn-primary">+</button>
-    </form>`;
-}
-
-function addListToMainContent(list) {
-    const listsMain = document.getElementById('lists-main');
-    listsMain.innerHTML += `
-        <div class="row m-4 border rounded-lg shadow p-4" id="${list.name}">
-            <div class="col-md-12 text-capitalize">
-                <h4>${list.name}</h4>
-                <!-- Add other list details here -->
-            </div>
-        </div>`;
-    addTaskFormToMainContent(list.name, list.id);
-}
-
-
-document.body.addEventListener('submit', async function(e) {
-    if (e.target && e.target.id.startsWith('delete-list-form-')) {
-        e.preventDefault();
-        const listid = e.target.listid.value;
-        const listname = e.target.listname.value;
-        const success = await deleteList(listid);
-        if (success) {
-            removelistElem(listname)
+    async function createList(name) {
+        try {
+            const response = await fetch('/lists/create', {
+                method: 'POST',
+                body: JSON.stringify({ 'name': name }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return await response.json();
+           
+        } catch (error) {
+            console.error('Failed to create list:', error);
+            return null;
+            
         }
     }
-});
 
+    async function deleteList(listid) {
+        try {
+            const response = await fetch('/lists/delete', {
+                method: 'POST',
+                body: JSON.stringify({ 'listid': listid }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return await response.json();
+    
+        } catch (error) {
+            console.error('Failed to Delete list:', error);            
+        }
+    }   
 
+    function addListToSidebar(listName, listId) {
+        const sidebarLists = document.getElementById('sidebar-lists');
+        if (!sidebarLists) return;
+        
+        const listItem = document.createElement('li');
+        listItem.classList.add('nav-item', 'm-2', 'row');
+        listItem.id = "sidebar-" + listName;
+        listItem.innerHTML = `
+            <a class="m-2 justify-content-start col-sm">${listName}</a>
+            <form id="update-list-form-${listId}">
+                <input type="hidden" class="form-control" name="listid" value="${listId}"  aria-label="List Name">
+                <button type="submit" class="btn btn-sm btn-success m-1">Edit</button>
+            </form>
+            <form id="delete-list-form-${listId}" >
+                <input type="hidden" class="form-control" name="listid" value="${listId}"  aria-label="List Name">
+                <input type="hidden" class="form-control" name="listname" value="${listName}"  aria-label="List Name">
+                <button type="submit" class="btn btn-sm m-1 btn-danger">-</button>
+            </form>
+        `;
 
-document.getElementById("add-list-form")?.addEventListener('submit' ,async (e) => {
-    e.preventDefault();
-    const listName = e.target.name.value;
-    const newList = await createList(listName);
-    const listId = newList.id;
-    if (newList) {
-        addListToSidebar(newList.name,listId);
-        addListToMainContent(newList, listId);
-      
+        sidebarLists.appendChild(listItem);
     }
-});
+
+    function addTaskFormToMainContent(listName, listId) {
+        const list = document.getElementById(listName);
+        list.innerHTML += `
+        <form action="/add-task" method="post" class=" ml-2 form-inline">
+            <input type="hidden" name="listid" value="${listId}">
+            <input type="text" class="form-control mr-2" name="description" placeholder="New Task" aria-label="Task Description">
+            <button type="submit" class="btn btn-primary">+</button>
+        </form>`;
+    }
+
+    function addListToMainContent(list) {
+        const listsMain = document.getElementById('lists-main');
+        listsMain.innerHTML += `
+            <div class="row p-2" id="${list.name}">
+                <div class="col-md-12 text-capitalize">
+                    <h4>${list.name}</h4>
+                    <!-- Add other list details here -->
+                </div>
+            </div>`;
+        addTaskFormToMainContent(list.name, list.id);
+    }
+
+
+    function removelistElem(listname) {
+        console.log("Removing sidebar lists");
+        console.log(listname);
+        const sidebarListDiv = document.getElementById("sidebar-" + listname);
+        const mainListDiv = document.getElementById(listname)
+        sidebarListDiv.remove();
+        mainListDiv.remove(); 
+    }
+
+    
+    function changCompleteButton(taskid, completed) {
+        console.log("changCompleteButton function");
+        console.log("taskid:  " + taskid);
+        console.log("completed:  " + completed);
+
+        const formButton = document.getElementById('task-completion-form-button-' + taskid);
+      
+        if (completed) {
+            formButton.classList.remove('btn-success');
+            formButton.classList.add('btn-secondary');
+        
+            formButton.innerText = 'Completed :)';
+        } else {
+            formButton.classList.remove('btn-secondary');
+            formButton.classList.add('btn-success');
+            formButton.innerText = 'Complete';
+        }
+    }
+    async function taskcompletion(taskid) {
+        console.log("taskcompletion function");
+        try {
+            const response = await fetch('/task-completion', {
+                method: 'POST',
+                body: JSON.stringify({ 'taskid': taskid }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        
+            return await response.json();
+
+    
+        } catch (error) {
+            console.error('Failed to complete task:', error);            
+        }
+    }
+
+
+
+    document.body.addEventListener('submit', async function(e) {
+        if (e.target && e.target.id.startsWith('task-completion-form-')) {
+            e.preventDefault();
+            const taskid = e.target.taskid.value;
+            const success = await taskcompletion(taskid);
+           
+            if (success) {
+       
+                console.log("taskcompletion function returning:  " + JSON.stringify(success));
+                console.log("completed:  " + success.completed);
+                console.log("id:  " + success.id);
+                changCompleteButton(taskid, success.completed);
+            }
+        }
+    });
+
+
+    document.body.addEventListener('submit', async function(e) {
+        if (e.target && e.target.id.startsWith('delete-list-form-')) {
+            e.preventDefault();
+            const listid = e.target.listid.value;
+            const listname = e.target.listname.value;
+            const success = await deleteList(listid);
+            if (success) {
+                removelistElem(listname)
+            }
+        }
+    });
+
+
+    document.getElementById("add-list-form")?.addEventListener('submit' ,async (e) => {
+        e.preventDefault();
+        const listName = e.target.name.value;
+        const newList = await createList(listName);
+        const listId = newList.id;
+        if (newList) {
+            addListToSidebar(newList.name,listId);
+            addListToMainContent(newList, listId);
+        
+        }
+    });
 </script>
