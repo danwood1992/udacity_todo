@@ -6,12 +6,15 @@
         <!-- Sidebar for Lists -->
         <div class="col-md-3 col-lg-2 d-none d-md-block bg-light sidebar">
             <div class="sidebar-sticky">
-                <ul class="nav flex-column" id="sidebar-lists">               
+                <ul class="nav flex-column" id="sidebar-lists">    
+                    <li class="nav-item m-2 row">
+                        <a class="m-2 justify-content-start col-sm">Lists</a>
+                    </li>           
                     {% for list in lists %}                 
                     <div class="container-fluid" id="sidebar-{{list.name}}">
                         <li class="nav-item m-2 row ">
                             <a class="m-2 justify-content-start col-sm">{{list.name}}</a>
-                            {% include 'forms/form_list_update.html' %}    
+                      
                             {% include 'forms/form_list_del.html' %}
                         </li>
                     </div>
