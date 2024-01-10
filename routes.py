@@ -10,7 +10,7 @@ def get_task(request):
 @app.route('/')
 def index():
     users = User.query.all()
-    lists = TodoList.query.all()
+    lists = TodoList.query.order_by('id').all()
     tasks = TodoItem.query.all()
     print(f"debug tasks: {tasks}")
     return render_template('index.html', users=users,lists=lists, tasks=tasks)

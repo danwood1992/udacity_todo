@@ -59,10 +59,6 @@ addListToMainContent: Adds the new list to the main content area.
         listItem.id = "sidebar-" + listName;
         listItem.innerHTML = `
             <a class="m-2 justify-content-start col-sm">${listName}</a>
-            <form id="update-list-form-${listId}">
-                <input type="hidden" class="form-control" name="listid" value="${listId}"  aria-label="List Name">
-                <button type="submit" class="btn btn-sm btn-success m-1">Edit</button>
-            </form>
             <form id="delete-list-form-${listId}" >
                 <input type="hidden" class="form-control" name="listid" value="${listId}"  aria-label="List Name">
                 <input type="hidden" class="form-control" name="listname" value="${listName}"  aria-label="List Name">

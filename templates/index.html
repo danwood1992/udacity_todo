@@ -32,14 +32,17 @@
                         {% include 'forms/form_task_add.html' %}
                         <ul class="list-group  ">
                             {% for task in list.tasks %}
+                            <div class="row">
+                            </div>
                             {% include 'forms/form_task_complete.html' %}    
+                       
                             <li class="rounded-left border border-dark border-top-0 border-right-0   d-flex justify-content-between rounded align-items-center">
                                 {% if task.completed %}
                                 <span class="ml-2 text"><del>{{ task.description }}</del></span>
                                 {% else %}
                                 <span class="ml-2 ">{{ task.description }}</span>
                                 {% endif %}
-                               
+                                {% include 'forms/form_task_del.html' %}    
                              
                             </li>
                             {% endfor %}
