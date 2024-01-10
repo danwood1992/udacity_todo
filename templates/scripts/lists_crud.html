@@ -84,7 +84,7 @@ function addListToSidebar(listName, listId) {
 function addTaskFormToMainContent(listName, listId) {
     const list = document.getElementById(listName);
     list.innerHTML += `
-    <form action="/add-task" method="post" class="form-inline">
+    <form action="/add-task" method="post" class=" ml-2 form-inline">
         <input type="hidden" name="listid" value="${listId}">
         <input type="text" class="form-control mr-2" name="description" placeholder="New Task" aria-label="Task Description">
         <button type="submit" class="btn btn-primary">+</button>
@@ -94,7 +94,7 @@ function addTaskFormToMainContent(listName, listId) {
 function addListToMainContent(list) {
     const listsMain = document.getElementById('lists-main');
     listsMain.innerHTML += `
-        <div class="row mb-4 border rounded-lg shadow p-4" id="${list.name}">
+        <div class="row m-4 border rounded-lg shadow p-4" id="${list.name}">
             <div class="col-md-12 text-capitalize">
                 <h4>${list.name}</h4>
                 <!-- Add other list details here -->
