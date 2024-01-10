@@ -28,7 +28,6 @@ def add_list():
 
 @app.route('/lists/delete', methods=['POST'])
 def delete_list():
-
     listid = request.get_json()['listid']
     todo_list = TodoList.query.get(listid)
 
@@ -51,11 +50,13 @@ def add_task():
     db.session.commit()
     return redirect(url_for('index'))
 
-@app.route('/complete-task', methods=['POST'])
-def complete_task():
-    task = get_task(request)
-    task.completed = True
-    db.session.commit()
+@app.route('/task-completion', methods=['POST'])
+def task_completion():
+    task_id = request.get_json()['taskid']
+    if task_id:
+        task = TodoItem.query.get(task_id)
+        task.complete = not task.complete
+        db.session.commit()
     return redirect(url_for('index'))
 
 @app.route('/undo-complete', methods=['POST'])
