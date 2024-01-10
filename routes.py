@@ -57,13 +57,11 @@ def task_completion():
         task = TodoItem.query.get(task_id)
         task.complete = not task.complete
         db.session.commit()
-    return redirect(url_for('index'))
+    return jsonify({
+        'id': task.id,
+        'complete': task.complete
+    })
 
-@app.route('/undo-complete', methods=['POST'])
-def undo_complete_task():
-    task = get_task(request)
-    task.undo_complete()
-    return redirect(url_for('index'))
 
 @app.route('/delete-task', methods=['POST'])
 def delete_task():
